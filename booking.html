@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Your Car - CarRental</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:#0c0c0c;color:white;padding-top:80px}
+
+/* NAVBAR */
+nav{
+  position:fixed;top:0;left:0;width:100%;
+  background:black;padding:15px 40px;
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:2px solid gold;z-index:1000;
+}
+nav h2{color:gold}
+nav ul{list-style:none;display:flex;gap:25px}
+nav ul li a{color:white;text-decoration:none}
+nav ul li a:hover{color:gold}
+
+/* FORM */
+.container{
+  width:90%;max-width:460px;
+  background:#111;margin:20px auto;
+  padding:25px;border-radius:10px;
+  border:2px solid gold;
+}
+.container h1{text-align:center;color:gold}
+
+label{
+  display:block;margin-top:12px;
+  color:gold;font-size:14px;
+}
+input{
+  width:100%;padding:12px;margin-top:6px;
+  background:black;color:white;
+  border:1px solid #444;border-radius:5px;
+}
+button{
+  width:100%;margin-top:15px;padding:12px;
+  background:red;color:white;border:none;
+  border-radius:5px;font-size:18px;cursor:pointer;
+}
+button:hover{background:#b30000}
+
+/* MAP */
+.map-box{
+  margin-top:10px;
+  border:2px solid gold;
+  border-radius:8px;
+  overflow:hidden;
+}
+iframe{width:100%;height:220px;border:0}
+
+/* PRICE BOX */
+#priceBox{
+  display:none;
+  background:#000;padding:12px;
+  border:1px solid gold;border-radius:8px;
+  margin-top:12px;
+}
+#priceBox p{margin:6px 0}
+
+.warning{color:orange;font-size:14px;margin-top:8px}
+.success{display:none;color:lightgreen;text-align:center;margin-top:10px}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav>
+<h2>CarRental</h2>
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="cars.html">Cars</a></li>
+<li><a href="payment.html">Payment</a></li>
+<li><a href="contact.html">Contact</a></li>
+</ul>
+</nav>
+
+<div class="container">
+<h1>Book Your Car</h1>
+
+<input type="text" id="name" placeholder="Your Name" required>
+<input type="number" id="phone" placeholder="Phone Number" required>
+
+<!-- PICKUP -->
+<label>Pickup Location</label>
+<input type="text" id="pickupLocation" placeholder="Enter pickup location" onkeyup="updateMaps()" required>
+
+<!-- DROP -->
+<label>Drop Location</label>
+<input type="text" id="dropLocation" placeholder="Enter drop location" onkeyup="updateMaps()" required>
+
+<!-- ROUTE MAP -->
+<div class="map-box">
+<iframe id="routeMap"
+src="https://www.google.com/maps?q=India&output=embed"></iframe>
+</div>
+
+<!-- DATE TIME -->
+<label>Pickup Date & Time</label>
+<input type="date" id="pickupDate" onchange="calculatePrice()" required>
+<input type="time" id="pickupTime" required>
+
+<label>Drop Date & Time</label>
+<input type="date" id="dropDate" onchange="calculatePrice()" required>
+<input type="time" id="dropTime" required>
+
+<!-- KM -->
+<label>Estimated Total Kilometers</label>
+<input type="number" id="km" placeholder="Enter estimated km" onchange="calculatePrice()" required>
+
+<!-- PRICE SUMMARY -->
+<div id="priceBox">
+<p>Price per day: <b id="perDay"></b></p>
+<p>Total days: <b id="days"></b></p>
+<p>Extra KM charge: <b id="extraKm"></b></p>
+<p style="font-size:18px;color:gold">
+Total Amount: <b id="total"></b>
+</p>
+<p class="warning" id="lateWarning"></p>
+</div>
+
+<button onclick="sendBooking()">Submit Booking</button>
+<p class="success" id="successMessage">Booking Sent Successfully!</p>
+</div>
+
+<script>
+
+/* MAP ROUTE */
+function updateMaps(){
+  let p = pickupLocation.value;
+  let d = dropLocation.value;
+  if(p.length>3 && d.length>3){
+    routeMap.src =
+    "https://www.google.com/maps?saddr="+
+    encodeURIComponent(p)+"&daddr="+
+    encodeURIComponent(d)+"&output=embed";
+  }
+}
+
+/* CALCULATION */
+function calculatePrice(){
+  let priceText = localStorage.getItem("selectedCarPrice") || "₹3000";
+  let perDay = parseInt(priceText.replace(/[^0-9]/g,""));
+  let start = pickupDate.value;
+  let end = dropDate.value;
+  let km = parseInt(document.getElementById("km").value||0);
+
+  if(!start || !end) return;
+
+  let daysCount = (new Date(end)-new Date(start))/(1000*60*60*24);
+  if(daysCount<=0) return;
+
+  let base = daysCount * perDay;
+  let freeKm = daysCount * 300;
+  let extraCharge = km>freeKm ? (km-freeKm)*10 : 0;
+  let totalAmount = base + extraCharge;
+
+  priceBox.style.display="block";
+  perDay.innerText="₹"+perDay;
+  days.innerText=daysCount;
+  extraKm.innerText="₹"+extraCharge;
+  total.innerText="₹"+totalAmount;
+
+  if(dropTime.value > pickupTime.value){
+    lateWarning.innerText="⚠ Late return may add extra day charge";
+  }else lateWarning.innerText="";
+
+  localStorage.setItem("totalAmount",totalAmount);
+}
+
+/* SEND BOOKING */
+function sendBooking(){
+  let msg=
+`New Booking Request
+Name: ${name.value}
+Phone: ${phone.value}
+Pickup: ${pickupLocation.value}
+Drop: ${dropLocation.value}
+Pickup: ${pickupDate.value} ${pickupTime.value}
+Drop: ${dropDate.value} ${dropTime.value}
+Estimated KM: ${km.value}
+Total Amount: ₹${localStorage.getItem("totalAmount")}`;
+
+  window.open(`https://wa.me/91XXXXXXXXXX?text=${encodeURIComponent(msg)}`);
+  successMessage.style.display="block";
+}
+</script>
+
+</body>
+</html>

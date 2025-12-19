@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - CarRental</title>
+
+<style>
+*{
+    margin:0; padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
+body{
+    background:#0c0c0c;
+    color:white;
+    padding-top:80px;
+}
+
+/* NAVBAR (same everywhere) */
+nav{
+    width:100%;
+    padding:15px 40px;
+    background:black;
+    position:fixed;
+    top:0; left:0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:2px solid gold;
+    z-index:1000;
+}
+nav h2{
+    color:gold;
+    font-size:24px;
+}
+nav ul{
+    display:flex;
+    gap:25px;
+    list-style:none;
+}
+nav ul li a{
+    color:white;
+    text-decoration:none;
+    font-size:17px;
+}
+nav ul li a:hover{
+    color:gold;
+}
+
+/* PAGE TITLE */
+h1{
+    color:gold;
+    text-align:center;
+    margin-bottom:20px;
+}
+
+/* ADMIN WRAPPER */
+.admin-wrapper{
+    width:90%;
+    max-width:900px;
+    margin:auto;
+}
+
+/* FORM */
+.add-box{
+    background:#111;
+    padding:20px;
+    border-radius:10px;
+    border:2px solid gold;
+}
+.add-box input{
+    width:100%;
+    padding:12px;
+    margin:8px 0;
+    border-radius:5px;
+    background:black;
+    border:1px solid #444;
+    color:white;
+}
+.add-box button{
+    width:100%;
+    padding:12px;
+    background:red;
+    border:none;
+    color:white;
+    border-radius:5px;
+    margin-top:10px;
+    font-size:18px;
+}
+.add-box button:hover{
+    background:#b30000;
+}
+
+/* CAR LIST */
+.list-title{
+    margin-top:30px;
+    font-size:22px;
+    color:gold;
+}
+.car-list{
+    margin-top:10px;
+}
+.car-item{
+    background:#111;
+    padding:15px;
+    border-radius:10px;
+    border:1px solid #333;
+    margin-bottom:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+.car-item img{
+    height:60px;
+    width:100px;
+    border-radius:5px;
+    object-fit:cover;
+    border:2px solid red;
+}
+.car-item button{
+    padding:8px 15px;
+    background:red;
+    border:none;
+    color:white;
+    border-radius:5px;
+    cursor:pointer;
+}
+.car-item button:hover{
+    background:#b30000;
+}
+
+/* BOOKING VIEW */
+.book-box{
+    margin-top:40px;
+}
+.book-item{
+    background:#222;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid gold;
+    margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav>
+    <h2>CarRental Admin</h2>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+    </ul>
+</nav>
+
+<h1>Admin Dashboard</h1>
+
+<div class="admin-wrapper">
+
+    <!-- ADD CAR BOX -->
+    <div class="add-box">
+        <h3 style="color:gold;text-align:center;">Add New Car</h3>
+
+        <input type="text" id="carName" placeholder="Car Name">
+        <input type="text" id="carPrice" placeholder="Price / Day">
+        <input type="text" id="carImage" placeholder="Image URL">
+
+        <button onclick="addCar()">Add Car</button>
+    </div>
+
+    <!-- CAR LIST -->
+    <h3 class="list-title">Car List</h3>
+    <div class="car-list" id="carList"></div>
+
+    <!-- BOOKINGS VIEW (Firebase-ready placeholder) -->
+    <div class="book-box">
+        <h3 style="color:gold;">Bookings</h3>
+        <div id="bookingList"></div>
+    </div>
+
+</div>
+
+<script>
+/* -------------------- LOAD CARS -------------------- */
+
+function loadCars(){
+    let cars = JSON.parse(localStorage.getItem("cars")) || [];
+    let box = document.getElementById("carList");
+    box.innerHTML = "";
+
+    cars.forEach((car, index) => {
+        box.innerHTML += `
+            <div class="car-item">
+                <div>
+                    <h3 style="color:gold">${car.name}</h3>
+                    <p>₹${car.price}/day</p>
+                </div>
+                <img src="${car.image}">
+                <button onclick="deleteCar(${index})">Delete</button>
+            </div>
+        `;
+    });
+}
+loadCars();
+
+/* -------------------- ADD CAR -------------------- */
+
+function addCar(){
+    let name = document.getElementById("carName").value;
+    let price = document.getElementById("carPrice").value;
+    let image = document.getElementById("carImage").value;
+
+    if(!name || !price || !image){
+        alert("Fill all fields!");
+        return;
+    }
+
+    let cars = JSON.parse(localStorage.getItem("cars")) || [];
+
+    cars.push({ name, price, image });
+
+    localStorage.setItem("cars", JSON.stringify(cars));
+
+    alert("Car Added Successfully!");
+    loadCars();
+}
+
+/* -------------------- DELETE CAR -------------------- */
+
+function deleteCar(index){
+    let cars = JSON.parse(localStorage.getItem("cars")) || [];
+    cars.splice(index, 1);
+    localStorage.setItem("cars", JSON.stringify(cars));
+    loadCars();
+}
+
+/* -------------------- LOAD BOOKINGS (Firebase later) -------------------- */
+
+function loadBookings(){
+    let books = JSON.parse(localStorage.getItem("bookings")) || [];
+
+    let box = document.getElementById("bookingList");
+    box.innerHTML = "";
+
+    books.forEach(b => {
+        box.innerHTML += `
+            <div class="book-item">
+                <p><b>Name:</b> ${b.name}</p>
+                <p><b>Phone:</b> ${b.phone}</p>
+                <p><b>Date:</b> ${b.date}</p>
+                <p><b>Car:</b> ${b.car}</p>
+            </div>
+        `;
+    });
+}
+loadBookings();
+</script>
+
+</body>
+</html>

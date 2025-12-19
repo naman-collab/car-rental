@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CarRental Premium</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:#0a0a0a;color:white;overflow-x:hidden}
+
+/* NAVBAR */
+nav{
+  position:fixed;top:0;left:0;width:100%;
+  background:black;padding:15px 40px;
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:2px solid gold;z-index:2000;
+}
+nav h2{color:gold}
+nav ul{list-style:none;display:flex;gap:25px}
+nav ul li a{color:white;text-decoration:none}
+nav ul li a:hover{color:gold}
+
+/* PROFILE */
+#profileIcon{
+  width:45px;height:45px;border-radius:50%;
+  border:2px solid gold;
+  background-size:cover;background-position:center;
+  display:none;cursor:pointer;
+}
+#dropdownMenu{
+  position:absolute;right:40px;top:70px;
+  background:#111;border:1px solid gold;
+  border-radius:10px;width:160px;display:none;
+}
+#dropdownMenu p{padding:10px;cursor:pointer}
+#dropdownMenu p:hover{background:#222}
+
+/* LOGIN */
+#loginPopup{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.85);
+  display:flex;justify-content:center;align-items:center;
+  z-index:5000;
+}
+.login-box{
+  background:#111;border:2px solid gold;
+  padding:25px;border-radius:10px;
+  width:320px;text-align:center;
+}
+.login-box input{
+  width:100%;padding:10px;margin-top:10px;
+  background:#222;border:1px solid gold;color:white;
+}
+.login-box button{
+  width:100%;margin-top:12px;padding:12px;
+  background:red;color:white;border:none;
+}
+
+/* SLIDER */
+.slider{height:100vh;margin-top:70px;position:relative;overflow:hidden}
+.slide{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  opacity:0;transform:scale(1.1);transition:1.2s;
+}
+.slide.active{opacity:1;transform:scale(1)}
+.overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent,#000)}
+.slider-content{
+  position:absolute;bottom:140px;left:60px;z-index:2;
+}
+.slider-content h1{font-size:55px}
+.slider-content p{font-size:22px}
+
+/* FILTER */
+.filter-box{text-align:center;margin:40px 0}
+.filter-box select{
+  padding:10px 20px;
+  background:black;color:gold;
+  border:1px solid gold;
+}
+
+/* CARS */
+.cars{padding:20px 40px}
+.cars h2{text-align:center;color:gold;margin-bottom:20px}
+.car-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:25px;
+}
+.car-box{
+  background:#111;border:1px solid #333;
+  padding:15px;border-radius:10px;text-align:center;
+}
+.car-box img{
+  width:100%;height:170px;object-fit:cover;
+  border-radius:10px;border:2px solid red;
+}
+.btn{
+  margin-top:10px;padding:10px 20px;
+  background:red;color:white;border:none;
+}
+
+/* POPUP */
+#detailsPopup{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.7);
+  display:none;justify-content:center;align-items:center;
+}
+.popup{
+  background:#111;border:2px solid gold;
+  padding:20px;border-radius:10px;
+}
+
+/* FOOTER */
+.footer{
+  background:#000;border-top:2px solid gold;
+  padding:40px 20px;margin-top:50px;
+}
+.footer-container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:30px;
+}
+.footer-box h3{color:gold}
+.footer-box p,.footer-box a{color:#ccc;text-decoration:none}
+.footer-bottom{text-align:center;margin-top:30px;color:#777}
+</style>
+</head>
+
+<body>
+
+<nav>
+<h2>CarRental</h2>
+<ul>
+<li><a href="#">Home</a></li>
+<li><a href="#">Cars</a></li>
+<li><a href="#">Booking</a></li>
+<li><a href="#">Contact</a></li>
+</ul>
+<div id="profileIcon" onclick="toggleDropdown()"></div>
+</nav>
+
+<div id="dropdownMenu">
+<p>My Profile</p>
+<p onclick="logout()">Logout</p>
+</div>
+
+<!-- LOGIN -->
+<div id="loginPopup">
+<div class="login-box">
+<h2 style="color:gold">Login</h2>
+<input type="file" id="photoInput">
+<input type="text" id="username" placeholder="Name">
+<input type="email" id="email" placeholder="Email">
+<button onclick="login()">Continue</button>
+</div>
+</div>
+
+<!-- SLIDER -->
+<div class="slider">
+<div class="slide active" style="background-image:url('download (10).jpeg')"></div>
+<div class="slide" style="background-image:url('Snap dav clg.jpeg')"></div>
+<div class="slide" style="background-image:url('download (4).jpeg')"></div>
+<div class="slide" style="background-image:url('download (9).jpeg')"></div>
+<div class="slide" style="background-image:url('Fortuner snaps.jpeg')"></div>
+<div class="overlay"></div>
+<div class="slider-content">
+<h1 id="typedHeading"></h1>
+<p id="typedSub"></p>
+</div>
+</div>
+
+<div class="filter-box">
+<select id="carFilter" onchange="filterCars()">
+<option value="all">All</option>
+<option value="suv">SUV</option>
+<option value="sedan">Sedan</option>
+<option value="luxury">Luxury</option>
+</select>
+</div>
+
+<!-- CARS (BULK – SAME IMAGE NAMES) -->
+<section class="cars">
+<h2>Our Car Fleet</h2>
+<div class="car-grid">
+
+<!-- SUV -->
+<div class="car-box" data-type="suv"><img src="Scorpio N.jpeg"><h3>Scorpio-N</h3><p>₹3500/day</p><button class="btn" onclick="showDetails('Scorpio-N | SUV')">Details</button></div>
+<div class="car-box" data-type="suv"><img src="Scorpio N.jpeg"><h3>Scorpio-N Black</h3><p>₹3600/day</p><button class="btn" onclick="showDetails('Scorpio-N Black')">Details</button></div>
+
+<div class="car-box" data-type="suv"><img src="Toyota Fortuner GR Sport.jpeg"><h3>Fortuner GR</h3><p>₹5000/day</p><button class="btn" onclick="showDetails('Fortuner GR')">Details</button></div>
+<div class="car-box" data-type="suv"><img src="toyota-fortuner-right-front-three-quarter35.avif"><h3>Fortuner White</h3><p>₹5200/day</p><button class="btn" onclick="showDetails('Fortuner White')">Details</button></div>
+
+<div class="car-box" data-type="suv"><img src="thar.jpeg"><h3>Thar Hard-Top</h3><p>₹3000/day</p><button class="btn" onclick="showDetails('Thar Hard-Top')">Details</button></div>
+<div class="car-box" data-type="suv"><img src="thar.jpeg"><h3>Thar Soft-Top</h3><p>₹2900/day</p><button class="btn" onclick="showDetails('Thar Soft-Top')">Details</button></div>
+
+<!-- LUXURY -->
+<div class="car-box" data-type="luxury"><img src="defender.jpeg"><h3>Defender 110</h3><p>₹9000/day</p><button class="btn" onclick="showDetails('Defender 110')">Details</button></div>
+<div class="car-box" data-type="luxury"><img src="KING.jpeg"><h3>Defender King Edition</h3><p>₹9500/day</p><button class="btn" onclick="showDetails('Defender King')">Details</button></div>
+
+<!-- SEDAN -->
+<div class="car-box" data-type="sedan"><img src="Verna black snap.jpeg"><h3>Verna Black</h3><p>₹2500/day</p><button class="btn" onclick="showDetails('Verna Black')">Details</button></div>
+<div class="car-box" data-type="sedan"><img src="verna.jpeg"><h3>Verna White</h3><p>₹2400/day</p><button class="btn" onclick="showDetails('Verna White')">Details</button></div>
+
+<!-- EXTRA (USING SAME FILES – PROFESSIONAL PRACTICE) -->
+<div class="car-box" data-type="sedan"><img src="verna.jpeg"><h3>Verna Turbo</h3><p>₹2600/day</p><button class="btn" onclick="showDetails('Verna Turbo')">Details</button></div>
+<div class="car-box" data-type="suv"><img src="Scorpio N.jpeg"><h3>Scorpio-N Adventure</h3><p>₹3800/day</p><button class="btn" onclick="showDetails('Scorpio Adventure')">Details</button></div>
+
+</div>
+</section>
+
+<!-- POPUP -->
+<div id="detailsPopup">
+<div class="popup">
+<h3 id="detailsText"></h3>
+<button class="btn" onclick="closeDetails()">Close</button>
+</div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+<div class="footer-container">
+<div class="footer-box">
+<h3>CarRental</h3>
+<p>Premium self-drive car rental service.</p>
+</div>
+<div class="footer-box">
+<h3>Quick Links</h3>
+<p><a href="#">Home</a></p>
+<p><a href="#">Cars</a></p>
+<p><a href="#">Booking</a></p>
+</div>
+<div class="footer-box">
+<h3>Contact</h3>
+<p>📞 +91 98765 43210</p>
+<p>📧 carrental@gmail.com</p>
+<p>📍 Haryana, India</p>
+</div>
+</div>
+<div class="footer-bottom">© 2025 CarRental</div>
+</footer>
+
+<script>
+function login(){
+let n=username.value,e=email.value,p=photoInput.files[0];
+if(!n||!e){alert("Fill all fields");return;}
+localStorage.setItem("userName",n);
+localStorage.setItem("userEmail",e);
+if(p){
+let r=new FileReader();
+r.onload=x=>{
+localStorage.setItem("userPhoto",x.target.result);
+profileIcon.style.backgroundImage=`url(${x.target.result})`;
+profileIcon.style.display="block";
+};
+r.readAsDataURL(p);
+}else profileIcon.style.display="block";
+loginPopup.style.display="none";
+}
+document.addEventListener("DOMContentLoaded",()=>{
+let n=localStorage.getItem("userName"),
+p=localStorage.getItem("userPhoto");
+if(!n) loginPopup.style.display="flex";
+else{
+profileIcon.style.display="block";
+if(p) profileIcon.style.backgroundImage=`url(${p})`;
+}
+});
+function toggleDropdown(){
+dropdownMenu.style.display=dropdownMenu.style.display==="block"?"none":"block";
+}
+function logout(){
+localStorage.clear();
+profileIcon.style.display="none";
+dropdownMenu.style.display="none";
+loginPopup.style.display="flex";
+}
+function filterCars(){
+let f=carFilter.value;
+document.querySelectorAll(".car-box").forEach(c=>{
+c.style.display=(f==="all"||c.dataset.type===f)?"block":"none";
+});
+}
+function showDetails(t){
+detailsText.innerText=t;
+detailsPopup.style.display="flex";
+}
+function closeDetails(){
+detailsPopup.style.display="none";
+}
+
+/* TYPING EFFECT */
+let heads=["Premium Car Rentals","SUV • Sedan • Luxury","Trusted Car Service"];
+let subs=["Drive your dream","Best prices in city","Book in seconds"];
+let i=0,j=0;
+function type(){
+typedHeading.innerText=heads[i].slice(0,j++);
+typedSub.innerText=subs[i].slice(0,j);
+if(j>heads[i].length){j=0;i=(i+1)%heads.length;}
+setTimeout(type,120);
+}
+type();
+</script>
+
+</body>
+</html>

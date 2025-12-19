@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Cars - CarRental</title>
+
+<style>
+*{
+    margin:0; padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
+body{
+    background:#0c0c0c;
+    color:white;
+    padding-top:80px;
+}
+
+/* NAVBAR (same for all pages) */
+nav{
+    width:100%;
+    padding:15px 40px;
+    background:black;
+    position:fixed;
+    top:0; left:0;
+    z-index:1000;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:2px solid gold;
+}
+nav h2{
+    color:gold;
+    font-size:24px;
+}
+nav ul{
+    display:flex;
+    gap:25px;
+    list-style:none;
+}
+nav ul li a{
+    color:white;
+    text-decoration:none;
+    font-size:17px;
+}
+nav ul li a:hover{
+    color:gold;
+}
+
+/* CONTENT */
+.container{
+    padding:40px 20px;
+}
+.container h1{
+    color:gold;
+    text-align:center;
+    margin-bottom:25px;
+    font-size:32px;
+}
+
+/* CAR GRID */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+    gap:25px;
+}
+.card{
+    background:#111;
+    padding:15px;
+    border-radius:10px;
+    border:1px solid #333;
+    transition:0.3s;
+}
+.card:hover{
+    transform:scale(1.04);
+    box-shadow:0 0 15px red;
+}
+.card img{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+    border-radius:10px;
+    border:2px solid red;
+}
+.card h3{
+    margin-top:10px;
+    color:gold;
+}
+.card p{
+    margin-top:5px;
+    font-size:16px;
+    color:#ccc;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav>
+    <h2>CarRental</h2>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="booking.html">Book</a></li>
+        <li><a href="payment.html">Payment</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="contact.html">Contact</a></li>
+    </ul>
+</nav>
+
+<!-- ALL CARS PAGE -->
+<div class="container">
+    <h1>All Cars</h1>
+
+    <div class="grid">
+
+        <div class="card">
+            <img src="ao.jpeg">
+            <h3>Scorpio-N</h3>
+            <p>₹3500/day</p>
+        </div>
+
+        <div class="card">
+            <img src="fourtuner.jpeg">
+            <h3>Fortuner</h3>
+            <p>₹5000/day</p>
+        </div>
+
+        <div class="card">
+            <img src="Modified Thar 🫶🏻❤️.jpeg">
+            <h3>Thar</h3>
+            <p>₹3000/day</p>
+        </div>
+
+        <div class="card">
+            <img src="def.jpeg">
+            <h3>Defender</h3>
+            <p>₹9000/day</p>
+        </div>
+
+        <div class="card">
+            <img src="Vernaaaaa.jpeg">
+            <h3>Verna</h3>
+            <p>₹2500/day</p>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

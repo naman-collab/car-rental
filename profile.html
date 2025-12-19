@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Profile</title>
+
+<style>
+    body {
+        background: #0a0a0a;
+        color: white;
+        font-family: Arial;
+        padding: 40px;
+    }
+
+    .profile-box {
+        width: 400px;
+        margin: auto;
+        background: #111;
+        padding: 25px;
+        border-radius: 12px;
+        border: 2px solid gold;
+        text-align: center;
+    }
+
+    .profile-photo {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 3px solid gold;
+        object-fit: cover;
+        margin-bottom: 15px;
+    }
+
+    input {
+        width: 90%;
+        padding: 10px;
+        margin-top: 10px;
+        background: #222;
+        border: 1px solid gold;
+        color: white;
+        border-radius: 5px;
+    }
+
+    .btn {
+        padding: 12px;
+        width: 95%;
+        background: red;
+        margin-top: 15px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .btn:hover { background: #b30000; }
+
+    h2 { color: gold; }
+</style>
+</head>
+
+<body>
+
+<div class="profile-box">
+
+    <h2>Your Profile</h2>
+
+    <img id="profileImg" class="profile-photo" src="">
+
+    <h3 id="profileName"></h3>
+    <p id="profileEmail"></p>
+
+    <hr style="margin:15px 0; border:1px solid #333;">
+
+    <p><b>Mobile:</b> <span id="profileMobile"></span></p>
+    <p><b>City:</b> <span id="profileCity"></span></p>
+    <p><b>Age:</b> <span id="profileAge"></span></p>
+
+    <hr style="margin:15px 0; border:1px solid #333;">
+
+    <h3>Edit Profile</h3>
+
+    <input type="file" id="newPhoto">
+    <input type="text" id="newName" placeholder="Enter name">
+    <input type="text" id="newMobile" placeholder="Enter mobile number">
+    <input type="text" id="newCity" placeholder="Enter city">
+    <input type="number" id="newAge" placeholder="Enter age">
+
+    <button class="btn" onclick="updateProfile()">Save Changes</button>
+
+</div>
+
+
+<script>
+
+/* ========== ALWAYS LOAD PROFILE DATA CORRECTLY ========== */
+document.addEventListener("DOMContentLoaded", () => {
+
+    let photo = localStorage.getItem("userPhoto");
+    let name = localStorage.getItem("userName");
+    let email = localStorage.getItem("userEmail");
+
+    document.getElementById("profileImg").src = photo ? photo : "";
+    document.getElementById("profileName").innerText = name ?? "";
+    document.getElementById("profileEmail").innerText = email ?? "";
+
+    document.getElementById("profileMobile").innerText = localStorage.getItem("userMobile") || "Not Added";
+    document.getElementById("profileCity").innerText = localStorage.getItem("userCity") || "Not Added";
+    document.getElementById("profileAge").innerText = localStorage.getItem("userAge") || "Not Added";
+
+});
+
+/* ========== UPDATE PROFILE ========== */
+function updateProfile() {
+
+    let name = newName.value;
+    let mobile = newMobile.value;
+    let city = newCity.value;
+    let age = newAge.value;
+    let photoFile = newPhoto.files[0];
+
+    /* PHOTO UPDATE */
+    if (photoFile) {
+        let reader = new FileReader();
+        reader.onload = (e) => {
+            localStorage.setItem("userPhoto", e.target.result);
+            profileImg.src = e.target.result;
+        };
+        reader.readAsDataURL(photoFile);
+    }
+
+    if (name) {
+        localStorage.setItem("userName", name);
+        profileName.innerText = name;
+    }
+
+    if (mobile) {
+        localStorage.setItem("userMobile", mobile);
+        profileMobile.innerText = mobile;
+    }
+
+    if (city) {
+        localStorage.setItem("userCity", city);
+        profileCity.innerText = city;
+    }
+
+    if (age) {
+        localStorage.setItem("userAge", age);
+        profileAge.innerText = age;
+    }
+
+    alert("Profile Updated Successfully!");
+}
+</script>
+
+</body>
+</html>

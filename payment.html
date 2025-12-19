@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment - CarRental</title>
+
+<style>
+*{
+    margin:0; padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
+body{
+    background:#0c0c0c;
+    color:white;
+    padding-top:80px;
+}
+
+/* NAVBAR */
+nav{
+    width:100%;
+    padding:15px 40px;
+    background:black;
+    position:fixed;
+    top:0; left:0;
+    z-index:1000;
+    border-bottom:2px solid gold;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+nav h2{ color:gold; font-size:24px; }
+nav ul{
+    display:flex; gap:25px; list-style:none;
+}
+nav ul li a{
+    color:white; text-decoration:none; font-size:17px;
+}
+nav ul li a:hover{ color:gold; }
+
+/* PAYMENT BOX */
+.box{
+    width:90%;
+    max-width:400px;
+    background:#111;
+    margin:30px auto;
+    padding:25px;
+    border-radius:10px;
+    border:2px solid gold;
+}
+.box h1{
+    text-align:center;
+    color:gold;
+    margin-bottom:20px;
+}
+
+/* BUTTONS */
+.pay-btn{
+    width:100%; padding:12px;
+    margin-top:12px; border:none;
+    background:red; color:white;
+    border-radius:5px; font-size:18px;
+}
+.pay-btn:hover{ background:#b30000; }
+
+.upi-btn{
+    background:gold; color:black;
+}
+.upi-btn:hover{ background:#f0c400; }
+
+/* CARD FORM */
+.card-form{
+    margin-top:15px;
+    display:none;
+}
+.card-form input{
+    width:100%; padding:12px;
+    margin:8px 0; border-radius:5px;
+    border:1px solid #444;
+    background:black; color:white;
+}
+
+/* UPI SECTION */
+.upi-section{
+    display:none;
+    margin-top:15px;
+    text-align:center;
+}
+.upi-section img{
+    width:200px; height:200px;
+    margin:auto; border-radius:10px;
+    border:2px solid red;
+}
+.copy-btn{
+    margin-top:10px;
+    background:#222;
+    color:gold;
+    padding:8px 15px;
+    border:none;
+    border-radius:5px;
+}
+.copy-btn:hover{
+    background:#333;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav>
+    <h2>CarRental</h2>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="cars.html">Cars</a></li>
+        <li><a href="booking.html">Book</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="contact.html">Contact</a></li>
+    </ul>
+</nav>
+
+<!-- PAYMENT BOX -->
+<div class="box">
+    <h1>Choose Payment Method</h1>
+
+    <button class="pay-btn" onclick="showCard()">Pay With Card</button>
+    <button class="pay-btn upi-btn" onclick="showUPI()">Pay With UPI</button>
+
+    <!-- CARD PAYMENT FORM -->
+    <div class="card-form" id="cardForm">
+        <input type="text" placeholder="Card Holder Name">
+        <input type="number" placeholder="Card Number">
+        <input type="text" placeholder="Expiry (MM/YY)">
+        <input type="password" placeholder="CVV">
+
+        <button class="pay-btn" onclick="paySuccess()">Pay Now</button>
+    </div>
+
+    <!-- UPI PAYMENT -->
+    <div class="upi-section" id="upiBox">
+        <img src="YOUR_UPI_QR">
+        <p style="margin-top:10px; font-size:18px;">UPI ID: <b id="upiId">yourupi@bank</b></p>
+
+        <button class="copy-btn" onclick="copyUPI()">Copy UPI ID</button>
+
+        <button class="pay-btn" onclick="paySuccess()">I Have Paid</button>
+    </div>
+
+</div>
+
+<script>
+function showCard(){
+    document.getElementById("cardForm").style.display="block";
+    document.getElementById("upiBox").style.display="none";
+}
+function showUPI(){
+    document.getElementById("upiBox").style.display="block";
+    document.getElementById("cardForm").style.display="none";
+}
+
+function copyUPI(){
+    navigator.clipboard.writeText("yourupi@bank");
+    alert("UPI ID Copied!");
+}
+
+function paySuccess(){
+    window.location="payment-success.html";
+}
+</script>
+
+</body>
+</html>
