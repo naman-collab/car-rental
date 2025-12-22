@@ -6,92 +6,87 @@
 <title>All Cars - CarRental</title>
 
 <style>
-*{
-    margin:0; padding:0;
-    box-sizing:border-box;
-    font-family:Arial;
-}
-body{
-    background:#0c0c0c;
-    color:white;
-    padding-top:80px;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:#0b0b0b;color:white;padding-top:80px}
 
-/* NAVBAR (same for all pages) */
+/* NAVBAR */
 nav{
-    width:100%;
-    padding:15px 40px;
-    background:black;
-    position:fixed;
-    top:0; left:0;
-    z-index:1000;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    border-bottom:2px solid gold;
+  position:fixed;top:0;left:0;width:100%;
+  padding:15px 40px;background:black;
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:2px solid gold;z-index:1000;
 }
-nav h2{
-    color:gold;
-    font-size:24px;
+nav h2{color:gold;font-size:26px}
+nav ul{display:flex;gap:25px;list-style:none}
+nav ul li a{color:white;text-decoration:none}
+nav ul li a:hover{color:gold}
+
+/* HERO */
+.hero{text-align:center;padding:40px 20px 10px}
+.hero h1{font-size:38px;color:gold}
+.hero p{margin-top:10px;color:#aaa;font-size:18px}
+
+/* FILTER */
+.filters{
+  display:flex;gap:15px;flex-wrap:wrap;
+  justify-content:center;margin:25px;
 }
-nav ul{
-    display:flex;
-    gap:25px;
-    list-style:none;
-}
-nav ul li a{
-    color:white;
-    text-decoration:none;
-    font-size:17px;
-}
-nav ul li a:hover{
-    color:gold;
+.filters input,.filters select{
+  padding:10px 14px;background:#111;
+  border:1px solid gold;color:white;
+  border-radius:6px;
 }
 
-/* CONTENT */
-.container{
-    padding:40px 20px;
-}
-.container h1{
-    color:gold;
-    text-align:center;
-    margin-bottom:25px;
-    font-size:32px;
-}
-
-/* CAR GRID */
+/* GRID */
+.container{padding:30px}
 .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
-    gap:25px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:30px;
 }
+
+/* CARD */
 .card{
-    background:#111;
-    padding:15px;
-    border-radius:10px;
-    border:1px solid #333;
-    transition:0.3s;
+  background:linear-gradient(145deg,#111,#0a0a0a);
+  border:1px solid #333;
+  border-radius:14px;
+  overflow:hidden;
+  position:relative;
+  transition:.4s;
 }
 .card:hover{
-    transform:scale(1.04);
-    box-shadow:0 0 15px red;
+  transform:translateY(-8px);
+  box-shadow:0 0 25px rgba(255,0,0,.35);
+  border-color:red;
 }
-.card img{
-    width:100%;
-    height:180px;
-    object-fit:cover;
-    border-radius:10px;
-    border:2px solid red;
+.card img{width:100%;height:190px;object-fit:cover}
+.card-content{padding:15px}
+.card-content h3{color:gold;font-size:20px}
+.price{margin:6px 0;font-size:18px;color:#f55;font-weight:bold}
+.specs{font-size:14px;color:#aaa}
+.rating{margin-top:6px;color:gold}
+
+/* BADGE */
+.badge{
+  position:absolute;top:12px;left:12px;
+  background:green;color:white;
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:12px;
 }
-.card h3{
-    margin-top:10px;
-    color:gold;
+
+/* BUTTON */
+.book-btn{
+  position:absolute;
+  bottom:-60px;left:50%;
+  transform:translateX(-50%);
+  background:red;color:white;
+  border:none;padding:10px 24px;
+  border-radius:30px;
+  font-size:16px;cursor:pointer;
+  transition:.4s;
 }
-.card p{
-    margin-top:5px;
-    font-size:16px;
-    color:#ccc;
-}
+.card:hover .book-btn{bottom:15px}
 </style>
 </head>
 
@@ -99,54 +94,232 @@ nav ul li a:hover{
 
 <!-- NAVBAR -->
 <nav>
-    <h2>CarRental</h2>
-    <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="booking.html">Book</a></li>
-        <li><a href="payment.html">Payment</a></li>
-        <li><a href="login.html">Login</a></li>
-        <li><a href="contact.html">Contact</a></li>
-    </ul>
+  <h2>CarRental</h2>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="booking.html">Book</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
 </nav>
 
-<!-- ALL CARS PAGE -->
-<div class="container">
-    <h1>All Cars</h1>
+<!-- HERO -->
+<section class="hero">
+  <h1>Explore Our Premium Cars</h1>
+  <p>Luxury • SUV • Sedan • Best Price Guaranteed</p>
+</section>
 
-    <div class="grid">
-
-        <div class="card">
-            <img src="ao.jpeg">
-            <h3>Scorpio-N</h3>
-            <p>₹3500/day</p>
-        </div>
-
-        <div class="card">
-            <img src="fourtuner.jpeg">
-            <h3>Fortuner</h3>
-            <p>₹5000/day</p>
-        </div>
-
-        <div class="card">
-            <img src="Modified Thar 🫶🏻❤️.jpeg">
-            <h3>Thar</h3>
-            <p>₹3000/day</p>
-        </div>
-
-        <div class="card">
-            <img src="def.jpeg">
-            <h3>Defender</h3>
-            <p>₹9000/day</p>
-        </div>
-
-        <div class="card">
-            <img src="Vernaaaaa.jpeg">
-            <h3>Verna</h3>
-            <p>₹2500/day</p>
-        </div>
-
-    </div>
+<!-- FILTER -->
+<div class="filters">
+  <input type="text" id="search" placeholder="Search car..." onkeyup="filterCars()">
+  <select id="typeFilter" onchange="filterCars()">
+    <option value="all">All Types</option>
+    <option value="SUV">SUV</option>
+    <option value="Sedan">Sedan</option>
+    <option value="Luxury">Luxury</option>
+  </select>
+  <select id="priceFilter" onchange="filterCars()">
+    <option value="all">All Prices</option>
+    <option value="low">Below ₹3000</option>
+    <option value="mid">₹3000 - ₹5000</option>
+    <option value="high">Above ₹5000</option>
+  </select>
 </div>
+
+<!-- CARS -->
+<div class="container">
+<div class="grid">
+
+<!-- SUV -->
+<div class="card" data-name="Scorpio-N" data-type="SUV" data-price="3500">
+<span class="badge">Available</span>
+<img src="Scorpio N.jpeg">
+<div class="card-content">
+<h3>Scorpio-N</h3>
+<div class="price">₹3500 / day</div>
+<div class="specs">Diesel • 7 Seats</div>
+<div class="rating">⭐⭐⭐⭐☆</div>
+</div>
+<button class="book-btn" onclick="bookCar('Scorpio-N','3500')">Book Now</button>
+</div>
+
+<div class="card" data-name="Scorpio Classic" data-type="SUV" data-price="3200">
+<span class="badge">Available</span>
+<img src="scorpio.jpg">
+<div class="card-content">
+<h3>Scorpio Classic</h3>
+<div class="price">₹3200 / day</div>
+<div class="specs">Diesel • SUV</div>
+<div class="rating">⭐⭐⭐⭐☆</div>
+</div>
+<button class="book-btn" onclick="bookCar('Scorpio Classic','3200')">Book Now</button>
+</div>
+
+<div class="card" data-name="Thar" data-type="SUV" data-price="3000">
+<span class="badge">Available</span>
+<img src="thar.jpeg">
+<div class="card-content">
+<h3>Thar</h3>
+<div class="price">₹3000 / day</div>
+<div class="specs">4x4 • Offroad</div>
+<div class="rating">⭐⭐⭐⭐☆</div>
+</div>
+<button class="book-btn" onclick="bookCar('Thar','3000')">Book Now</button>
+</div>
+
+<div class="card" data-name="Creta" data-type="SUV" data-price="2800">
+<span class="badge">Available</span>
+<img src="creta.jpg">
+<div class="card-content">
+<h3>Hyundai Creta</h3>
+<div class="price">₹2800 / day</div>
+<div class="specs">Petrol • SUV</div>
+<div class="rating">⭐⭐⭐⭐☆</div>
+</div>
+<button class="book-btn" onclick="bookCar('Creta','2800')">Book Now</button>
+</div>
+
+<div class="card" data-name="Fortuner" data-type="SUV" data-price="5000">
+<span class="badge">Available</span>
+<img src="fortu.jpg">
+<div class="card-content">
+<h3>Fortuner</h3>
+<div class="price">₹5000 / day</div>
+<div class="specs">Premium SUV</div>
+<div class="rating">⭐⭐⭐⭐⭐</div>
+</div>
+<button class="book-btn" onclick="bookCar('Fortuner','5000')">Book Now</button>
+</div>
+
+<div class="card" data-name="Fortuner Legender" data-type="SUV" data-price="5500">
+<span class="badge">Available</span>
+<img src="Toyota Fortuner GR Sport.jpeg">
+<div class="card-content">
+<h3>Fortuner Legender</h3>
+<div class="price">₹5500 / day</div>
+<div class="specs">Luxury SUV</div>
+<div class="rating">⭐⭐⭐⭐⭐</div>
+</div>
+<button class="book-btn" onclick="bookCar('Fortuner Legender','5500')">Book Now</button>
+</div>
+
+<!-- SEDAN -->
+<div class="card" data-name="Verna" data-type="Sedan" data-price="2500">
+<span class="badge">Available</span>
+<img src="Verna black snap.jpeg">
+<div class="card-content">
+<h3>Verna</h3>
+<div class="price">₹2500 / day</div>
+<div class="specs">Petrol • Sedan</div>
+<div class="rating">⭐⭐⭐⭐☆</div>
+</div>
+<button class="book-btn" onclick="bookCar('Verna','2500')">Book Now</button>
+</div>
+
+<div class="card" data-name="Verna Turbo" data-type="Sedan" data-price="2800">
+<span class="badge">Available</span>
+<img src="Vernaaaaa.jpeg">
+<div class="card-content">
+<h3>Verna Turbo</h3>
+<div class="price">₹2800 / day</div>
+<div class="specs">Turbo • Sedan</div>
+<div class="rating">⭐⭐⭐⭐⭐</div>
+</div>
+<button class="book-btn" onclick="bookCar('Verna Turbo','2800')">Book Now</button>
+</div>
+
+<div class="card" data-name="Dzire" data-type="Sedan" data-price="2200">
+<span class="badge">Available</span>
+<img src="Swift.jpg">
+<div class="card-content">
+<h3>Swift Dzire</h3>
+<div class="price">₹2200 / day</div>
+<div class="specs">Petrol • Sedan</div>
+<div class="rating">⭐⭐⭐⭐☆</div>
+</div>
+<button class="book-btn" onclick="bookCar('Dzire','2200')">Book Now</button>
+</div>
+
+<!-- LUXURY -->
+<div class="card" data-name="Defender" data-type="Luxury" data-price="9000">
+<span class="badge">Available</span>
+<img src="defender.jpeg">
+<div class="card-content">
+<h3>Defender</h3>
+<div class="price">₹9000 / day</div>
+<div class="specs">Luxury SUV</div>
+<div class="rating">⭐⭐⭐⭐⭐</div>
+</div>
+<button class="book-btn" onclick="bookCar('Defender','9000')">Book Now</button>
+</div>
+
+<div class="card" data-name="Range Rover" data-type="Luxury" data-price="12000">
+<span class="badge">Available</span>
+<img src="range.jpg">
+<div class="card-content">
+<h3>Range Rover</h3>
+<div class="price">₹12000 / day</div>
+<div class="specs">Ultra Luxury</div>
+<div class="rating">⭐⭐⭐⭐⭐</div>
+</div>
+<button class="book-btn" onclick="bookCar('Range Rover','12000')">Book Now</button>
+</div>
+
+<div class="card" data-name="Audi A6" data-type="Luxury" data-price="10000">
+<span class="badge">Available</span>
+<img src="audi a6.jpg">
+<div class="card-content">
+<h3>Audi A6</h3>
+<div class="price">₹10000 / day</div>
+<div class="specs">Luxury Sedan</div>
+<div class="rating">⭐⭐⭐⭐⭐</div>
+</div>
+<button class="book-btn" onclick="bookCar('Audi A6','10000')">Book Now</button>
+</div>
+
+<div class="card" data-name="BMW 5 Series" data-type="Luxury" data-price="15000">
+<span class="badge">Available</span>
+<img src="bmw.jpg">
+<div class="card-content">
+<h3>BMW 5 Series</h3>
+<div class="price">₹15000 / day</div>
+<div class="specs">Luxury Sedan</div>
+<div class="rating">⭐⭐⭐⭐⭐</div>
+</div>
+<button class="book-btn" onclick="bookCar('BMW 5 Series','15000')">Book Now</button>
+</div>
+
+</div>
+</div>
+
+<script>
+function bookCar(name,price){
+  localStorage.setItem("selectedCarName",name);
+  localStorage.setItem("selectedCarPrice",price);
+  window.location.href="booking.html";
+}
+
+function filterCars(){
+  let s = search.value.toLowerCase();
+  let t = typeFilter.value;
+  let p = priceFilter.value;
+
+  document.querySelectorAll(".card").forEach(c=>{
+    let price = parseInt(c.dataset.price);
+    let priceOk =
+      p==="all" ||
+      (p==="low" && price<3000) ||
+      (p==="mid" && price>=3000 && price<=5000) ||
+      (p==="high" && price>5000);
+
+    let ok =
+      c.dataset.name.toLowerCase().includes(s) &&
+      (t==="all"||c.dataset.type===t) &&
+      priceOk;
+
+    c.style.display = ok ? "block" : "none";
+  });
+}
+</script>
 
 </body>
 </html>

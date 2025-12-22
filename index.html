@@ -1,487 +1,490 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CarRental Premium</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CarRental Premium</title>
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial
-    }
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:#0a0a0a;color:white;overflow-x:hidden}
 
-    body {
-      background: #0a0a0a;
-      color: white;
-      overflow-x: hidden
-    }
+/* NAVBAR */
+nav{
+position:fixed;top:0;left:0;width:100%;
+background:black;padding:15px 40px;
+display:flex;justify-content:space-between;align-items:center;
+border-bottom:2px solid gold;z-index:2000;
+}
+nav h2{color:gold}
+nav ul{list-style:none;display:flex;gap:25px}
+nav ul li a{color:white;text-decoration:none}
+nav ul li a:hover{color:gold}
 
-    /* NAVBAR */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: black;
-      padding: 15px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 2px solid gold;
-      z-index: 2000;
-    }
+/* PROFILE */
+#profileIcon{
+width:45px;height:45px;border-radius:50%;
+border:2px solid gold;
+background-size:cover;background-position:center;
+display:none;cursor:pointer;
+}
 
-    nav h2 {
-      color: gold
-    }
+/* DROPDOWN */
+#dropdownMenu{
+position:absolute;right:40px;top:70px;
+background:#111;border:1px solid gold;
+border-radius:10px;width:160px;display:none;
+z-index:3000;
+}
+#dropdownMenu p{padding:12px;cursor:pointer}
+#dropdownMenu p:hover{background:#222}
 
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 25px
-    }
+/* LOGIN */
+#loginPopup{
+position:fixed;inset:0;
+background:rgba(0,0,0,.85);
+display:flex;justify-content:center;align-items:center;
+z-index:5000;
+}
+.login-box{
+background:#111;border:2px solid gold;
+padding:25px;border-radius:10px;width:320px;text-align:center;
+}
+.login-box input{
+width:100%;padding:10px;margin-top:10px;
+background:#222;border:1px solid gold;color:white;
+}
+.login-box button{
+width:100%;margin-top:12px;padding:12px;
+background:red;color:white;border:none;
+}
 
-    nav ul li a {
-      color: white;
-      text-decoration: none
-    }
+/* SLIDER */
+.slider{height:100vh;margin-top:70px;position:relative;overflow:hidden}
+.slide{
+position:absolute;inset:0;
+background-size:cover;background-position:center;
+opacity:0;transform:scale(1.1);transition:1.2s;
+}
+.slide.active{opacity:1;transform:scale(1)}
+.overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent,#000)}
+.slider-content{
+position:absolute;bottom:140px;left:60px;z-index:2;
+}
+.slider-content h1{font-size:55px}
+.slider-content p{font-size:22px}
 
-    nav ul li a:hover {
-      color: gold
-    }
+/* FILTER */
+.filter-box{text-align:center;margin:40px 0}
+.filter-box select{
+padding:10px 20px;background:black;
+color:gold;border:1px solid gold;
+}
 
-    /* PROFILE */
-    #profileIcon {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      border: 2px solid gold;
-      background-size: cover;
-      background-position: center;
-      display: none;
-      cursor: pointer;
-    }
+/* CARS */
+.cars{padding:20px 40px}
+.cars h2{text-align:center;color:gold;margin-bottom:20px}
+.car-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:25px;
+}
+.car-box{
+background:#111;border:1px solid #333;
+padding:15px;border-radius:10px;text-align:center;
+}
+.car-box img{
+width:100%;height:170px;object-fit:cover;
+border-radius:10px;border:2px solid red;
+}
+.btn{
+margin-top:10px;padding:10px 20px;
+background:red;color:white;border:none;cursor:pointer;
+}
 
-    #dropdownMenu {
-      position: absolute;
-      right: 40px;
-      top: 70px;
-      background: #111;
-      border: 1px solid gold;
-      border-radius: 10px;
-      width: 160px;
-      display: none;
-    }
+/* DETAILS POPUP */
+#detailsPopup{
+position:fixed;inset:0;
+background:rgba(0,0,0,.7);
+display:none;justify-content:center;align-items:center;
+z-index:4000;
+}
+.popup{
+background:#111;border:2px solid gold;
+padding:20px;border-radius:10px;width:320px;
+}
+.popup p{margin:6px 0}
+/* ===== MEGA FOOTER ===== */
+.mega-footer{
+  background:#050505;
+  color:#ccc;
+  margin-top:80px;
+}
 
-    #dropdownMenu p {
-      padding: 10px;
-      cursor: pointer
-    }
+/* TOP STRIP */
+.footer-top-strip{
+  background:linear-gradient(90deg, gold, orange);
+  color:#000;
+  padding:30px 40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.footer-top-strip h2{font-size:32px}
+.footer-top-strip p{font-size:16px}
+.footer-cta{
+  background:#000;
+  color:#fff;
+  padding:14px 28px;
+  text-decoration:none;
+  font-weight:bold;
+  border-radius:30px;
+}
 
-    #dropdownMenu p:hover {
-      background: #222
-    }
+/* MAIN */
+.footer-main{
+  padding:60px 40px;
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1.2fr;
+  gap:40px;
+}
+.footer-col h3,
+.footer-col h1{
+  color:gold;
+  margin-bottom:15px;
+}
+.footer-col a{
+  display:block;
+  color:#ccc;
+  text-decoration:none;
+  margin:8px 0;
+}
+.footer-col a:hover{color:gold}
+.footer-col p{margin:8px 0; line-height:1.6}
 
-    /* LOGIN */
-    #loginPopup {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, .85);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 5000;
-    }
+.trust-badges span{
+  display:inline-block;
+  background:#111;
+  border:1px solid gold;
+  padding:6px 10px;
+  margin:5px 5px 0 0;
+  font-size:13px;
+}
 
-    .login-box {
-      background: #111;
-      border: 2px solid gold;
-      padding: 25px;
-      border-radius: 10px;
-      width: 320px;
-      text-align: center;
-    }
+/* MAP + SOCIAL */
+.footer-extra{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:30px;
+  padding:40px;
+  border-top:1px solid #222;
+}
+.map-box iframe{
+  width:100%;
+  height:220px;
+  border:0;
+  border-radius:10px;
+}
+.social-icons span{
+  font-size:26px;
+  margin-right:15px;
+  cursor:pointer;
+}
 
-    .login-box input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      background: #222;
-      border: 1px solid gold;
-      color: white;
-    }
+/* BOTTOM */
+.footer-bottom{
+  border-top:1px solid #222;
+  text-align:center;
+  padding:20px;
+  color:#777;
+  font-size:14px;
+}
 
-    .login-box button {
-      width: 100%;
-      margin-top: 12px;
-      padding: 12px;
-      background: red;
-      color: white;
-      border: none;
-    }
+/* RESPONSIVE */
+@media(max-width:900px){
+  .footer-main{
+    grid-template-columns:1fr;
+  }
+  .footer-extra{
+    grid-template-columns:1fr;
+  }
+  .footer-top-strip{
+    flex-direction:column;
+    gap:15px;
+    text-align:center;
+  }
+}
 
-    /* SLIDER */
-    .slider {
-      height: 100vh;
-      margin-top: 70px;
-      position: relative;
-      overflow: hidden
-    }
-
-    .slide {
-      position: absolute;
-      inset: 0;
-      background-size: cover;
-      background-position: center;
-      opacity: 0;
-      transform: scale(1.1);
-      transition: 1.2s;
-    }
-
-    .slide.active {
-      opacity: 1;
-      transform: scale(1)
-    }
-
-    .overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom, transparent, #000)
-    }
-
-    .slider-content {
-      position: absolute;
-      bottom: 140px;
-      left: 60px;
-      z-index: 2;
-    }
-
-    .slider-content h1 {
-      font-size: 55px
-    }
-
-    .slider-content p {
-      font-size: 22px
-    }
-
-    /* FILTER */
-    .filter-box {
-      text-align: center;
-      margin: 40px 0
-    }
-
-    .filter-box select {
-      padding: 10px 20px;
-      background: black;
-      color: gold;
-      border: 1px solid gold;
-    }
-
-    /* CARS */
-    .cars {
-      padding: 20px 40px
-    }
-
-    .cars h2 {
-      text-align: center;
-      color: gold;
-      margin-bottom: 20px
-    }
-
-    .car-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 25px;
-    }
-
-    .car-box {
-      background: #111;
-      border: 1px solid #333;
-      padding: 15px;
-      border-radius: 10px;
-      text-align: center;
-    }
-
-    .car-box img {
-      width: 100%;
-      height: 170px;
-      object-fit: cover;
-      border-radius: 10px;
-      border: 2px solid red;
-    }
-
-    .btn {
-      margin-top: 10px;
-      padding: 10px 20px;
-      background: red;
-      color: white;
-      border: none;
-    }
-
-    /* POPUP */
-    #detailsPopup {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, .7);
-      display: none;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .popup {
-      background: #111;
-      border: 2px solid gold;
-      padding: 20px;
-      border-radius: 10px;
-    }
-
-    /* FOOTER */
-    .footer {
-      background: #000;
-      border-top: 2px solid gold;
-      padding: 40px 20px;
-      margin-top: 50px;
-    }
-
-    .footer-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 30px;
-    }
-
-    .footer-box h3 {
-      color: gold
-    }
-
-    .footer-box p,
-    .footer-box a {
-      color: #ccc;
-      text-decoration: none
-    }
-
-    .footer-bottom {
-      text-align: center;
-      margin-top: 30px;
-      color: #777
-    }
-  </style>
+</style>
 </head>
 
 <body>
 
-  <nav>
-    <h2>CarRental</h2>
-    <ul>
-      <li><a href="/index.html">Home</a></li>
-      <li><a href="/cars.html">Cars</a></li>
-      <li><a href="/booking.html">Booking</a></li>
-      <li><a href="/contact.html">Contact</a></li>
-    </ul>
-    <div id="profileIcon" onclick="toggleDropdown()"></div>
-  </nav>
+<!-- NAVBAR -->
+<nav>
+<h2>CarRental</h2>
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="cars.html">Cars</a></li>
+<li><a href="booking.html">Booking</a></li>
+<li><a href="contact.html">Contact</a></li>
+</ul>
+<div id="profileIcon" onclick="toggleDropdown()"></div>
+</nav>
 
-  <div id="dropdownMenu">
-    <p>My Profile</p>
-    <p onclick="logout()">Logout</p>
+<div id="dropdownMenu">
+<p id="profileName"></p>
+<p onclick="logout()">Logout</p>
+</div>
+
+<!-- LOGIN -->
+<div id="loginPopup">
+<div class="login-box">
+<h2 style="color:gold">Login</h2>
+<input type="file" id="photoInput">
+<input type="text" id="username" placeholder="Name">
+<input type="email" id="email" placeholder="Email">
+<button onclick="login()">Continue</button>
+</div>
+</div>
+
+<!-- SLIDER (10 IMAGES) -->
+<div class="slider">
+<div class="slide active" style="background-image:url('download (10).jpeg')"></div>
+<div class="slide" style="background-image:url('Snap dav clg.jpeg')"></div>
+<div class="slide" style="background-image:url('download (4).jpeg')"></div>
+<div class="slide" style="background-image:url('download (9).jpeg')"></div>
+<div class="slide" style="background-image:url('Fortuner snaps.jpeg')"></div>
+<div class="slide" style="background-image:url('Scorpio N.jpeg')"></div>
+<div class="slide" style="background-image:url('Toyota Fortuner GR Sport.jpeg')"></div>
+<div class="slide" style="background-image:url('defender.jpeg')"></div>
+<div class="slide" style="background-image:url('Verna black snap.jpeg')"></div>
+<div class="overlay"></div>
+<div class="slider-content">
+<h1 id="typedHeading"></h1>
+<p id="typedSub"></p>
+</div>
+</div>
+
+<!-- FILTER -->
+<div class="filter-box">
+<select id="carFilter" onchange="filterCars()">
+<option value="all">All</option>
+<option value="suv">SUV</option>
+<option value="sedan">Sedan</option>
+<option value="luxury">Luxury</option>
+</select>
+</div>
+
+<!-- CARS (15) -->
+<section class="cars">
+<h2>Our Car Fleet</h2>
+<div class="car-grid">
+
+<div class="car-box" data-type="suv"><img src="Scorpio N.jpeg"><h3>Scorpio-N</h3><p>₹3500/day</p><button class="btn" onclick="openDetails('scorpio')">Details</button></div>
+<div class="car-box" data-type="suv"><img src="fortu.jpg"><h3>Fortuner</h3><p>₹5000/day</p><button class="btn" onclick="openDetails('fortuner')">Details</button></div>
+<div class="car-box" data-type="suv"><img src="thar.jpeg"><h3>Thar</h3><p>₹3000/day</p><button class="btn" onclick="openDetails('thar')">Details</button></div>
+<div class="car-box" data-type="luxury"><img src="defender.jpeg"><h3>Defender</h3><p>₹9000/day</p><button class="btn" onclick="openDetails('defender')">Details</button></div>
+<div class="car-box" data-type="sedan"><img src="Verna black snap.jpeg"><h3>Verna</h3><p>₹2500/day</p><button class="btn" onclick="openDetails('verna')">Details</button></div>
+
+<div class="car-box" data-type="suv"><img src="Toyota Fortuner GR Sport.jpeg"><h3>Fortuner Legender</h3><p>₹5500/day</p><button class="btn" onclick="openDetails('fortuner')">Details</button></div>
+<div class="car-box" data-type="luxury"><img src="range.jpg"><h3>Range Rover</h3><p>₹12000/day</p><button class="btn" onclick="openDetails('defender')">Details</button></div>
+<div class="car-box" data-type="sedan"><img src="Vernaaaaa.jpeg"><h3>Verna Turbo</h3><p>₹2800/day</p><button class="btn" onclick="openDetails('verna')">Details</button></div>
+<div class="car-box" data-type="suv"><img src="scorpio.jpg"><h3>Scorpio Classic</h3><p>₹3200/day</p><button class="btn" onclick="openDetails('scorpio')">Details</button></div>
+<div class="car-box" data-type="luxury"><img src="audi a6.jpg"><h3>Audi A6</h3><p>₹10000/day</p><button class="btn" onclick="openDetails('defender')">Details</button></div>
+
+</div>
+</section>
+
+<!-- DETAILS POPUP -->
+<div id="detailsPopup">
+<div class="popup">
+<h2 id="dName" style="color:gold"></h2>
+<p>Category: <span id="dType"></span></p>
+<p>⛽ Fuel: <span id="dFuel"></span></p>
+<p>👥 Seats: <span id="dSeats"></span></p>
+<p>🚘 Mileage: <span id="dMileage"></span></p>
+<p style="color:gold;font-size:18px"><span id="dPrice"></span></p>
+<button class="btn" onclick="bookNow()">Book Now</button>
+<button class="btn" onclick="closeDetails()">Close</button>
+</div>
+</div>
+<footer class="mega-footer">
+
+  <!-- TOP STRIP -->
+  <div class="footer-top-strip">
+    <div>
+      <h2>🚗 Need a Car Today?</h2>
+      <p>Book premium cars in minutes with transparent pricing.</p>
+    </div>
+    <a href="booking.html" class="footer-cta">Book Now</a>
   </div>
 
-  <!-- LOGIN -->
-  <div id="loginPopup">
-    <div class="login-box">
-      <h2 style="color:gold">Login</h2>
-      <input type="file" id="photoInput">
-      <input type="text" id="username" placeholder="Name">
-      <input type="email" id="email" placeholder="Email">
-      <button onclick="login()">Continue</button>
+  <!-- MAIN FOOTER -->
+  <div class="footer-main">
+
+    <!-- BRAND -->
+    <div class="footer-col brand">
+      <h1>CarRental</h1>
+      <p>
+        CarRental is a premium self-drive & luxury car rental service.
+        We offer SUVs, Sedans & Luxury cars for local, outstation,
+        weddings and airport transfers.
+      </p>
+
+      <div class="trust-badges">
+        <span>✔ 1000+ Customers</span>
+        <span>✔ Sanitized Cars</span>
+        <span>✔ 24x7 Support</span>
+      </div>
+    </div>
+
+    <!-- LINKS -->
+    <div class="footer-col">
+      <h3>Quick Links</h3>
+      <a href="index.html">Home</a>
+      <a href="cars.html">Cars</a>
+      <a href="booking.html">Booking</a>
+      <a href="contact.html">Contact</a>
+    </div>
+
+    <!-- SERVICES -->
+    <div class="footer-col">
+      <h3>Our Services</h3>
+      <p>Self Drive Cars</p>
+      <p>Luxury Car Rental</p>
+      <p>Wedding Cars</p>
+      <p>Airport Pickup & Drop</p>
+      <p>Outstation Trips</p>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="footer-col contact">
+      <h3>Contact Details</h3>
+      <p><b>📍 Address:</b><br>Haryana, India</p>
+      <p><b>📞 Phone:</b><br>+91 98765 43210</p>
+      <p><b>📧 Email:</b><br>carrental@gmail.com</p>
+      <p><b>🕒 Timing:</b><br>24x7 Customer Support</p>
+    </div>
+
+  </div>
+
+  <!-- MAP + SOCIAL -->
+  <div class="footer-extra">
+    <div class="map-box">
+      <iframe
+        src="https://www.google.com/maps?q=Haryana,India&output=embed"
+        loading="lazy">
+      </iframe>
+    </div>
+
+    <div class="social-box">
+      <h3>Follow Us</h3>
+      <div class="social-icons">
+        <span>📘</span>
+        <span>📸</span>
+        <span>🐦</span>
+        <span>💬</span>
+      </div>
+      <p>Stay connected for offers & updates.</p>
     </div>
   </div>
 
-  <!-- SLIDER -->
-  <div class="slider">
-    <div class="slide active" style="background-image:url('download (10).jpeg')"></div>
-    <div class="slide" style="background-image:url('Snap dav clg.jpeg')"></div>
-    <div class="slide" style="background-image:url('download (4).jpeg')"></div>
-    <div class="slide" style="background-image:url('download (9).jpeg')"></div>
-    <div class="slide" style="background-image:url('Fortuner snaps.jpeg')"></div>
-    <div class="overlay"></div>
-    <div class="slider-content">
-      <h1 id="typedHeading"></h1>
-      <p id="typedSub"></p>
-    </div>
+  <!-- BOTTOM -->
+  <div class="footer-bottom">
+    © 2025 CarRental • All Rights Reserved • Designed for Premium Experience
   </div>
 
-  <div class="filter-box">
-    <select id="carFilter" onchange="filterCars()">
-      <option value="all">All</option>
-      <option value="suv">SUV</option>
-      <option value="sedan">Sedan</option>
-      <option value="luxury">Luxury</option>
-    </select>
-  </div>
+</footer>
 
-  <!-- CARS (BULK – SAME IMAGE NAMES) -->
-  <section class="cars">
-    <h2>Our Car Fleet</h2>
-    <div class="car-grid">
 
-      <!-- SUV -->
-      <div class="car-box" data-type="suv"><img src="Scorpio N.jpeg">
-        <h3>Scorpio-N</h3>
-        <p>₹3500/day</p><button class="btn" onclick="showDetails('Scorpio-N | SUV')">Details</button>
-      </div>
-      <div class="car-box" data-type="suv"><img src="Scorpio N.jpeg">
-        <h3>Scorpio-N Black</h3>
-        <p>₹3600/day</p><button class="btn" onclick="showDetails('Scorpio-N Black')">Details</button>
-      </div>
+<script>
+/* LOGIN */
+function login(){
+let n=username.value,e=email.value,p=photoInput.files[0];
+if(!n||!e){alert("Fill all fields");return;}
+localStorage.setItem("userName",n);
+localStorage.setItem("userEmail",e);
+profileName.innerText=n;
+if(p){
+let r=new FileReader();
+r.onload=x=>{
+localStorage.setItem("userPhoto",x.target.result);
+profileIcon.style.backgroundImage=`url(${x.target.result})`;
+profileIcon.style.display="block";
+};
+r.readAsDataURL(p);
+}else profileIcon.style.display="block";
+loginPopup.style.display="none";
+}
 
-      <div class="car-box" data-type="suv"><img src="Toyota Fortuner GR Sport.jpeg">
-        <h3>Fortuner GR</h3>
-        <p>₹5000/day</p><button class="btn" onclick="showDetails('Fortuner GR')">Details</button>
-      </div>
-      <div class="car-box" data-type="suv"><img src="toyota-fortuner-right-front-three-quarter35.avif">
-        <h3>Fortuner White</h3>
-        <p>₹5200/day</p><button class="btn" onclick="showDetails('Fortuner White')">Details</button>
-      </div>
+document.addEventListener("DOMContentLoaded",()=>{
+let n=localStorage.getItem("userName"),p=localStorage.getItem("userPhoto");
+if(!n) loginPopup.style.display="flex";
+else{
+profileIcon.style.display="block";
+profileName.innerText=n;
+if(p) profileIcon.style.backgroundImage=`url(${p})`;
+}
+});
 
-      <div class="car-box" data-type="suv"><img src="thar.jpeg">
-        <h3>Thar Hard-Top</h3>
-        <p>₹3000/day</p><button class="btn" onclick="showDetails('Thar Hard-Top')">Details</button>
-      </div>
-      <div class="car-box" data-type="suv"><img src="thar.jpeg">
-        <h3>Thar Soft-Top</h3>
-        <p>₹2900/day</p><button class="btn" onclick="showDetails('Thar Soft-Top')">Details</button>
-      </div>
+/* DROPDOWN */
+function toggleDropdown(){
+dropdownMenu.style.display=dropdownMenu.style.display==="block"?"none":"block";
+}
+function logout(){localStorage.clear();location.reload();}
 
-      <!-- LUXURY -->
-      <div class="car-box" data-type="luxury"><img src="defender.jpeg">
-        <h3>Defender 110</h3>
-        <p>₹9000/day</p><button class="btn" onclick="showDetails('Defender 110')">Details</button>
-      </div>
-      <div class="car-box" data-type="luxury"><img src="KING.jpeg">
-        <h3>Defender King Edition</h3>
-        <p>₹9500/day</p><button class="btn" onclick="showDetails('Defender King')">Details</button>
-      </div>
+/* FILTER */
+function filterCars(){
+let f=carFilter.value;
+document.querySelectorAll(".car-box").forEach(c=>{
+c.style.display=(f==="all"||c.dataset.type===f)?"block":"none";
+});
+}
 
-      <!-- SEDAN -->
-      <div class="car-box" data-type="sedan"><img src="Verna black snap.jpeg">
-        <h3>Verna Black</h3>
-        <p>₹2500/day</p><button class="btn" onclick="showDetails('Verna Black')">Details</button>
-      </div>
-      <div class="car-box" data-type="sedan"><img src="verna.jpeg">
-        <h3>Verna White</h3>
-        <p>₹2400/day</p><button class="btn" onclick="showDetails('Verna White')">Details</button>
-      </div>
+/* SLIDER */
+let slides=document.querySelectorAll(".slide"),si=0;
+setInterval(()=>{
+slides.forEach(s=>s.classList.remove("active"));
+si=(si+1)%slides.length;
+slides[si].classList.add("active");
+},4000);
 
-      <!-- EXTRA (USING SAME FILES – PROFESSIONAL PRACTICE) -->
-      <div class="car-box" data-type="sedan"><img src="verna.jpeg">
-        <h3>Verna Turbo</h3>
-        <p>₹2600/day</p><button class="btn" onclick="showDetails('Verna Turbo')">Details</button>
-      </div>
-      <div class="car-box" data-type="suv"><img src="Scorpio N.jpeg">
-        <h3>Scorpio-N Adventure</h3>
-        <p>₹3800/day</p><button class="btn" onclick="showDetails('Scorpio Adventure')">Details</button>
-      </div>
+/* TYPING */
+let heads=["Premium Car Rentals","SUV • Sedan • Luxury","Trusted Car Service"];
+let subs=["Drive your dream","Best prices in city","Book in seconds"];
+let hi=0,ci=0;
+(function type(){
+typedHeading.innerText=heads[hi].slice(0,ci++);
+typedSub.innerText=subs[hi].slice(0,ci);
+if(ci>heads[hi].length){ci=0;hi=(hi+1)%heads.length;}
+setTimeout(type,120);
+})();
 
-    </div>
-  </section>
+/* CAR DATA */
+const cars={
+scorpio:{name:"Scorpio-N",type:"SUV",fuel:"Diesel",seats:"7",mileage:"15 km/l",price:"₹3500 / day"},
+fortuner:{name:"Fortuner",type:"SUV",fuel:"Diesel",seats:"7",mileage:"14 km/l",price:"₹5000 / day"},
+thar:{name:"Thar",type:"SUV",fuel:"Petrol/Diesel",seats:"4",mileage:"15 km/l",price:"₹3000 / day"},
+defender:{name:"Defender",type:"Luxury SUV",fuel:"Diesel",seats:"5",mileage:"12 km/l",price:"₹9000 / day"},
+verna:{name:"Verna",type:"Sedan",fuel:"Petrol",seats:"5",mileage:"18 km/l",price:"₹2500 / day"}
+};
 
-  <!-- POPUP -->
-  <div id="detailsPopup">
-    <div class="popup">
-      <h3 id="detailsText"></h3>
-      <button class="btn" onclick="closeDetails()">Close</button>
-    </div>
-  </div>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-container">
-      <div class="footer-box">
-        <h3>CarRental</h3>
-        <p>Premium self-drive car rental service.</p>
-      </div>
-      <div class="footer-box">
-        <h3>Quick Links</h3>
-        <p><a href="#">Home</a></p>
-        <p><a href="#">Cars</a></p>
-        <p><a href="#">Booking</a></p>
-      </div>
-      <div class="footer-box">
-        <h3>Contact</h3>
-        <p>📞 +91 98765 43210</p>
-        <p>📧 carrental@gmail.com</p>
-        <p>📍 Haryana, India</p>
-      </div>
-    </div>
-    <div class="footer-bottom">© 2025 CarRental</div>
-  </footer>
-
-  <script>
-    function login() {
-      let n = username.value, e = email.value, p = photoInput.files[0];
-      if (!n || !e) { alert("Fill all fields"); return; }
-      localStorage.setItem("userName", n);
-      localStorage.setItem("userEmail", e);
-      if (p) {
-        let r = new FileReader();
-        r.onload = x => {
-          localStorage.setItem("userPhoto", x.target.result);
-          profileIcon.style.backgroundImage = `url(${x.target.result})`;
-          profileIcon.style.display = "block";
-        };
-        r.readAsDataURL(p);
-      } else profileIcon.style.display = "block";
-      loginPopup.style.display = "none";
-    }
-    document.addEventListener("DOMContentLoaded", () => {
-      let n = localStorage.getItem("userName"),
-        p = localStorage.getItem("userPhoto");
-      if (!n) loginPopup.style.display = "flex";
-      else {
-        profileIcon.style.display = "block";
-        if (p) profileIcon.style.backgroundImage = `url(${p})`;
-      }
-    });
-    function toggleDropdown() {
-      dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
-    }
-    function logout() {
-      localStorage.clear();
-      profileIcon.style.display = "none";
-      dropdownMenu.style.display = "none";
-      loginPopup.style.display = "flex";
-    }
-    function filterCars() {
-      let f = carFilter.value;
-      document.querySelectorAll(".car-box").forEach(c => {
-        c.style.display = (f === "all" || c.dataset.type === f) ? "block" : "none";
-      });
-    }
-    function showDetails(t) {
-      detailsText.innerText = t;
-      detailsPopup.style.display = "flex";
-    }
-    function closeDetails() {
-      detailsPopup.style.display = "none";
-    }
-
-    /* TYPING EFFECT */
-    let heads = ["Premium Car Rentals", "SUV • Sedan • Luxury", "Trusted Car Service"];
-    let subs = ["Drive your dream", "Best prices in city", "Book in seconds"];
-    let i = 0, j = 0;
-    function type() {
-      typedHeading.innerText = heads[i].slice(0, j++);
-      typedSub.innerText = subs[i].slice(0, j);
-      if (j > heads[i].length) { j = 0; i = (i + 1) % heads.length; }
-      setTimeout(type, 120);
-    }
-    type();
-  </script>
+function openDetails(k){
+let c=cars[k];
+dName.innerText=c.name;
+dType.innerText=c.type;
+dFuel.innerText=c.fuel;
+dSeats.innerText=c.seats;
+dMileage.innerText=c.mileage;
+dPrice.innerText=c.price;
+detailsPopup.style.display="flex";
+localStorage.setItem("selectedCarName",c.name);
+localStorage.setItem("selectedCarPrice",c.price);
+}
+function closeDetails(){detailsPopup.style.display="none";}
+function bookNow(){window.location.href="booking.html";}
+</script>
 
 </body>
-
 </html>

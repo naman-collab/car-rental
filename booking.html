@@ -11,185 +11,343 @@ body{background:#0c0c0c;color:white;padding-top:80px}
 
 /* NAVBAR */
 nav{
-  position:fixed;top:0;left:0;width:100%;
-  background:black;padding:15px 40px;
-  display:flex;justify-content:space-between;align-items:center;
-  border-bottom:2px solid gold;z-index:1000;
+position:fixed;top:0;left:0;width:100%;
+background:black;padding:15px 40px;
+display:flex;justify-content:space-between;align-items:center;
+border-bottom:2px solid gold;z-index:1000;
 }
 nav h2{color:gold}
-nav ul{list-style:none;display:flex;gap:25px}
-nav ul li a{color:white;text-decoration:none}
-nav ul li a:hover{color:gold}
 
-/* FORM */
+/* CONTAINER */
 .container{
-  width:90%;max-width:460px;
-  background:#111;margin:20px auto;
-  padding:25px;border-radius:10px;
-  border:2px solid gold;
+width:90%;max-width:520px;
+background:#111;margin:20px auto;
+padding:25px;border-radius:12px;
+border:2px solid gold;
+animation:fadeIn .6s ease;
 }
 .container h1{text-align:center;color:gold}
 
-label{
-  display:block;margin-top:12px;
-  color:gold;font-size:14px;
+/* PROGRESS BAR */
+.progress{height:8px;background:#222;border-radius:10px;overflow:hidden;margin-bottom:20px}
+.progress-bar{
+height:100%;width:33%;
+background:linear-gradient(90deg,gold,orange);
+transition:.4s ease;
 }
-input{
-  width:100%;padding:12px;margin-top:6px;
-  background:black;color:white;
-  border:1px solid #444;border-radius:5px;
+
+/* FORM */
+label{display:block;margin-top:12px;color:gold;font-size:14px}
+input,select{
+width:100%;padding:12px;margin-top:6px;
+background:black;color:white;
+border:1px solid #444;border-radius:5px;
+transition:.3s;
 }
+input.error,select.error{border-color:red}
+
+/* BUTTONS */
 button{
-  width:100%;margin-top:15px;padding:12px;
-  background:red;color:white;border:none;
-  border-radius:5px;font-size:18px;cursor:pointer;
+width:100%;margin-top:15px;padding:12px;
+background:red;color:white;border:none;
+border-radius:6px;font-size:18px;cursor:pointer;
+transition:.3s;
 }
-button:hover{background:#b30000}
+button.secondary{background:#333}
+button:hover{transform:translateY(-2px);opacity:.9}
+
+/* STEPS */
+.step{display:none;animation:slide .5s ease}
+.step.active{display:block}
+
+/* CAR PREVIEW */
+.car-preview{
+margin-top:10px;border:2px solid gold;
+border-radius:8px;overflow:hidden;display:none;
+animation:zoom .5s ease;
+}
+.car-preview img{width:100%;height:200px;object-fit:cover}
 
 /* MAP */
-.map-box{
-  margin-top:10px;
-  border:2px solid gold;
-  border-radius:8px;
-  overflow:hidden;
-}
+.map-box{margin-top:10px;border:2px solid gold;border-radius:8px;overflow:hidden}
 iframe{width:100%;height:220px;border:0}
 
-/* PRICE BOX */
-#priceBox{
-  display:none;
-  background:#000;padding:12px;
-  border:1px solid gold;border-radius:8px;
-  margin-top:12px;
+/* INFO BOX */
+#priceBox,#remainingBox,#bookingResult,#printArea{
+display:none;background:#000;padding:12px;
+border:1px solid gold;border-radius:8px;
+margin-top:12px;
+animation:fadeUp .5s ease;
 }
-#priceBox p{margin:6px 0}
+.success{color:lightgreen;text-align:center;margin-top:10px}
 
-.warning{color:orange;font-size:14px;margin-top:8px}
-.success{display:none;color:lightgreen;text-align:center;margin-top:10px}
+/* PRINT */
+@media print{
+body *{visibility:hidden}
+#printArea, #printArea *{visibility:visible}
+#printArea{position:absolute;top:0;left:0;width:100%}
+}
+
+/* ANIMATIONS */
+@keyframes slide{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes zoom{from{transform:scale(.9)}to{transform:scale(1)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
-<nav>
-<h2>CarRental</h2>
-<ul>
-<li><a href="index.html">Home</a></li>
-<li><a href="cars.html">Cars</a></li>
-<li><a href="payment.html">Payment</a></li>
-<li><a href="contact.html">Contact</a></li>
-</ul>
-</nav>
+<nav><h2>CarRental</h2></nav>
 
 <div class="container">
 <h1>Book Your Car</h1>
 
-<input type="text" id="name" placeholder="Your Name" required>
-<input type="number" id="phone" placeholder="Phone Number" required>
+<div class="progress"><div class="progress-bar" id="progressBar"></div></div>
 
-<!-- PICKUP -->
+<!-- STEP 1 -->
+<div class="step active" id="step1">
+<label>Name</label>
+<input id="name" data-req>
+<label>Phone</label>
+<input id="phone" data-req>
+<button onclick="nextStep(1)">Next</button>
+</div>
+
+<!-- STEP 2 -->
+<div class="step" id="step2">
+<label>Select Car</label>
+<select id="carSelect" onchange="calculatePrice()" data-req>
+<option value="">-- Select Car --</option>
+<option value="Scorpio">Scorpio</option>
+<option value="Fortuner">Fortuner</option>
+<option value="Thar">Thar</option>
+<option value="Defender">Defender</option>
+<option value="Verna">Verna</option>
+</select>
+
+<div class="car-preview" id="carPreview"><img id="carImg"></div>
+
 <label>Pickup Location</label>
-<input type="text" id="pickupLocation" placeholder="Enter pickup location" onkeyup="updateMaps()" required>
+<input id="pickupLocation" onkeyup="updateMaps()" data-req>
 
-<!-- DROP -->
 <label>Drop Location</label>
-<input type="text" id="dropLocation" placeholder="Enter drop location" onkeyup="updateMaps()" required>
+<input id="dropLocation" onkeyup="updateMaps()" data-req>
 
-<!-- ROUTE MAP -->
 <div class="map-box">
-<iframe id="routeMap"
-src="https://www.google.com/maps?q=India&output=embed"></iframe>
+<iframe id="routeMap" src="https://www.google.com/maps?q=India&output=embed"></iframe>
 </div>
 
-<!-- DATE TIME -->
-<label>Pickup Date & Time</label>
-<input type="date" id="pickupDate" onchange="calculatePrice()" required>
-<input type="time" id="pickupTime" required>
+<button class="secondary" onclick="prevStep(2)">Back</button>
+<button onclick="nextStep(2)">Next</button>
+</div>
 
-<label>Drop Date & Time</label>
-<input type="date" id="dropDate" onchange="calculatePrice()" required>
-<input type="time" id="dropTime" required>
+<!-- STEP 3 -->
+<div class="step" id="step3">
+<label>Pickup Date</label>
+<input type="date" id="pickupDate" onchange="calculatePrice()" data-req>
 
-<!-- KM -->
-<label>Estimated Total Kilometers</label>
-<input type="number" id="km" placeholder="Enter estimated km" onchange="calculatePrice()" required>
+<label>Drop Date</label>
+<input type="date" id="dropDate" onchange="calculatePrice()" data-req>
 
-<!-- PRICE SUMMARY -->
+<label>Estimated KM</label>
+<input id="km" onchange="calculatePrice()">
+
+<label>Advance Paid (₹)</label>
+<input id="advance" onkeyup="calculateRemaining()">
+
 <div id="priceBox">
-<p>Price per day: <b id="perDay"></b></p>
-<p>Total days: <b id="days"></b></p>
-<p>Extra KM charge: <b id="extraKm"></b></p>
-<p style="font-size:18px;color:gold">
-Total Amount: <b id="total"></b>
-</p>
-<p class="warning" id="lateWarning"></p>
+<p>Per Day: <b id="perDay"></b></p>
+<p>Total Days: <b id="days"></b></p>
+<p>Extra KM Charge: <b id="extraKm"></b></p>
+<p style="color:gold;font-size:18px">Total Amount: <b id="total"></b></p>
 </div>
 
+<div id="remainingBox">
+<p>Advance Paid: <b id="advShow"></b></p>
+<p style="color:gold">Remaining Amount: <b id="remainingAmt"></b></p>
+</div>
+
+<button class="secondary" onclick="prevStep(3)">Back</button>
 <button onclick="sendBooking()">Submit Booking</button>
-<p class="success" id="successMessage">Booking Sent Successfully!</p>
+<div class="success" id="successMessage"></div>
+</div>
+
+<hr style="margin:25px 0;border:1px solid gold">
+
+<h2 style="color:gold;text-align:center">Check Booking</h2>
+<input id="searchBookingId" placeholder="Enter Booking ID">
+<button onclick="findBooking()">Check Booking</button>
+<div id="bookingResult"></div>
+
+<!-- RECEIPT -->
+<div id="printArea">
+<h3 style="color:gold">Booking Receipt</h3>
+<div id="receiptText"></div>
+<button onclick="window.print()">🖨 Print Receipt</button>
+</div>
+
 </div>
 
 <script>
+/* DATA */
+const carData={
+Scorpio:{price:3500,img:"Scorpio N.jpeg"},
+Fortuner:{price:5000,img:"Toyota Fortuner GR Sport.jpeg"},
+Thar:{price:3000,img:"thar.jpeg"},
+Defender:{price:9000,img:"defender.jpeg"},
+Verna:{price:2500,img:"Verna black snap.jpeg"}
+};
 
-/* MAP ROUTE */
+/* PROGRESS */
+function updateProgress(step){
+progressBar.style.width = step===1?"33%":step===2?"66%":"100%";
+}
+
+/* STEP */
+function nextStep(n){
+if(!softValidate(document.getElementById("step"+n)))return;
+document.getElementById("step"+n).classList.remove("active");
+document.getElementById("step"+(n+1)).classList.add("active");
+updateProgress(n+1);
+}
+function prevStep(n){
+document.getElementById("step"+n).classList.remove("active");
+document.getElementById("step"+(n-1)).classList.add("active");
+updateProgress(n-1);
+}
+
+/* SOFT VALIDATION */
+function softValidate(step){
+let ok=true;
+step.querySelectorAll("[data-req]").forEach(el=>{
+el.classList.toggle("error",!el.value);
+if(!el.value) ok=false;
+});
+return ok;
+}
+
+/* MAP */
 function updateMaps(){
-  let p = pickupLocation.value;
-  let d = dropLocation.value;
-  if(p.length>3 && d.length>3){
-    routeMap.src =
-    "https://www.google.com/maps?saddr="+
-    encodeURIComponent(p)+"&daddr="+
-    encodeURIComponent(d)+"&output=embed";
-  }
+if(pickupLocation.value.length>3 && dropLocation.value.length>3){
+routeMap.src="https://www.google.com/maps?saddr="+
+encodeURIComponent(pickupLocation.value)+"&daddr="+
+encodeURIComponent(dropLocation.value)+"&output=embed";
+}
 }
 
-/* CALCULATION */
+/* PRICE */
 function calculatePrice(){
-  let priceText = localStorage.getItem("selectedCarPrice") || "₹3000";
-  let perDay = parseInt(priceText.replace(/[^0-9]/g,""));
-  let start = pickupDate.value;
-  let end = dropDate.value;
-  let km = parseInt(document.getElementById("km").value||0);
+let car=carSelect.value;
+if(!car) return;
 
-  if(!start || !end) return;
+carImg.src=carData[car].img;
+carPreview.style.display="block";
 
-  let daysCount = (new Date(end)-new Date(start))/(1000*60*60*24);
-  if(daysCount<=0) return;
+if(!pickupDate.value||!dropDate.value) return;
 
-  let base = daysCount * perDay;
-  let freeKm = daysCount * 300;
-  let extraCharge = km>freeKm ? (km-freeKm)*10 : 0;
-  let totalAmount = base + extraCharge;
+let daysCount=Math.ceil(
+(new Date(dropDate.value)-new Date(pickupDate.value)) /
+(1000*60*60*24)
+);
+if(daysCount<=0) return;
 
-  priceBox.style.display="block";
-  perDay.innerText="₹"+perDay;
-  days.innerText=daysCount;
-  extraKm.innerText="₹"+extraCharge;
-  total.innerText="₹"+totalAmount;
+let base=daysCount*carData[car].price;
+let kmVal=parseInt(km.value||0);
+let freeKm=daysCount*300;
+let extra=kmVal>freeKm?(kmVal-freeKm)*10:0;
+let totalAmt=base+extra;
 
-  if(dropTime.value > pickupTime.value){
-    lateWarning.innerText="⚠ Late return may add extra day charge";
-  }else lateWarning.innerText="";
+priceBox.style.display="block";
+perDay.innerText="₹"+carData[car].price;
+days.innerText=daysCount;
+extraKm.innerText="₹"+extra;
+total.innerText="₹"+totalAmt;
 
-  localStorage.setItem("totalAmount",totalAmount);
+calculateRemaining();
 }
 
-/* SEND BOOKING */
-function sendBooking(){
-  let msg=
-`New Booking Request
-Name: ${name.value}
-Phone: ${phone.value}
-Pickup: ${pickupLocation.value}
-Drop: ${dropLocation.value}
-Pickup: ${pickupDate.value} ${pickupTime.value}
-Drop: ${dropDate.value} ${dropTime.value}
-Estimated KM: ${km.value}
-Total Amount: ₹${localStorage.getItem("totalAmount")}`;
+function calculateRemaining(){
+let adv=parseInt(advance.value||0);
+let tot=parseInt(total.innerText.replace("₹","")||0);
+let rem=tot-adv;
+remainingBox.style.display="block";
+advShow.innerText="₹"+adv;
+remainingAmt.innerText="₹"+(rem<0?0:rem);
+}
 
-  window.open(`https://wa.me/91XXXXXXXXXX?text=${encodeURIComponent(msg)}`);
-  successMessage.style.display="block";
+/* BOOKING ID */
+function generateBookingId(car){
+return "CR-"+car.substring(0,3).toUpperCase()+"-"+Math.floor(1000+Math.random()*9000);
+}
+
+/* SUBMIT + WHATSAPP + PRINT */
+function sendBooking(){
+
+/* ✅ FIX-1: name undefined issue */
+let customerName = document.getElementById("name").value;
+
+/* phone */
+let phoneNum = document.getElementById("phone").value.replace(/\D/g,"");
+
+let bookingId=generateBookingId(carSelect.value);
+
+let msg=
+`🚗 *CarRental – Booking Confirmation*
+
+🆔 Booking ID: ${bookingId}
+
+👤 Name: ${customerName}
+📞 Phone: ${phoneNum}
+
+🚘 Car: ${carSelect.value}
+
+📍 Pickup: ${pickupLocation.value}
+📍 Drop: ${dropLocation.value}
+
+💰 Total: ${total.innerText}
+💳 Advance: ${advShow.innerText}
+💵 Remaining: ${remainingAmt.innerText}
+
+Thank you for choosing *CarRental*
+Have a safe journey 🚘✨`;
+
+localStorage.setItem("booking_"+bookingId,JSON.stringify({
+bookingId,
+name:customerName,
+car:carSelect.value,
+pickup:pickupLocation.value,
+drop:dropLocation.value,
+total:total.innerText
+}));
+
+/* WhatsApp to SAME number user entered */
+window.open(
+"https://wa.me/91"+phoneNum+"?text="+encodeURIComponent(msg),
+"_blank"
+);
+
+/* UI updates */
+successMessage.innerText="Booking Successful! Booking ID: "+bookingId;
+
+/* ✅ FIX-2: Print enable */
+printArea.style.display="block";
+receiptText.innerHTML=msg.replace(/\n/g,"<br>");
+}
+
+/* SEARCH */
+function findBooking(){
+let data=localStorage.getItem("booking_"+searchBookingId.value.trim());
+if(!data)return alert("Booking not found");
+let b=JSON.parse(data);
+bookingResult.style.display="block";
+bookingResult.innerHTML=
+`<b>Booking ID:</b> ${b.bookingId}<br>
+<b>Name:</b> ${b.name}<br>
+<b>Car:</b> ${b.car}<br>
+<b>Pickup:</b> ${b.pickup}<br>
+<b>Drop:</b> ${b.drop}<br>
+<b>Total:</b> ${b.total}`;
 }
 </script>
 
